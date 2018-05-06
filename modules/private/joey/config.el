@@ -29,10 +29,16 @@
       (setq python-shell-interpreter "python"
             python-shell-interpreter-args "-i")))
 
+  (defun +jl|python-detect-version ()
+    (when-let* ((version-str (shell-command-to-string "python --version 2>&1 | cut -d' ' -f2")))
+      (setq version-str (string-trim version-str)
+            +python-current-version version-str)))
+
   (defun +jl|python-setup-everything (&rest args)
     (+jl|python-setup-shell)
-    (+python|detect-pyenv-version)
+    (+jl|python-detect-version)
     (+jl|python-add-version-to-modeline))
+
   ;; setup shell correctly on environment switch
   (dolist (func '(pyvenv-activate pyvenv-deactivate pyvenv-workon))
     (advice-add func :after '+jl|python-setup-everything)))
