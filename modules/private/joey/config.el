@@ -45,8 +45,6 @@
 
 ;; my key bindings
 (map!
- :nv [remap evil-next-line] #'evil-next-visual-line
- :nv [remap evil-previous-line] #'evil-previous-visual-line
  :n "Q"   #'kill-this-buffer
  :i "M-." #'sp-forward-slurp-sexp
  :i "M-," #'sp-forward-barf-sexp
