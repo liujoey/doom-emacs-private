@@ -3,8 +3,8 @@
     (mac-auto-operator-composition-mode))
 
 (def-package! pyvenv
+  :if (featurep! :lang python)
   :after python
-  :hook python-mode
   :config
   (defun +jl|python-add-version-to-modeline ()
     "Add version string to the major mode in the modeline."
