@@ -63,22 +63,34 @@
 
 ;; my email setting
 (set! :email "joey.liu@philips.com"
-    '((mu4e-sent-folder       . "/joey.liu@philips.com/Sent Mail")
-      (mu4e-drafts-folder     . "/joey.liu@philips.com/Drafts")
-      (mu4e-trash-folder      . "/joey.liu@philips.com/Trash")
-      (smtpmail-smtp-user     . "joey.liu@philips.com")
-      (user-mail-address      . "joey.liu@philips.com")
-      (mu4e-compose-signature . "\nBest regards\n\nJoey Liu\nPhilips Research\nDept. of Acute Care Solutions\n\n"))
-    t)
+  '((mu4e-sent-folder             . "/joey.liu@philips.com/Sent Mail")
+    (mu4e-drafts-folder           . "/joey.liu@philips.com/Drafts")
+    (mu4e-trash-folder            . "/joey.liu@philips.com/Trash")
+    (smtpmail-smtp-user           . "joey.liu@philips.com")
+    (smtpmail-stream-type         . nil)
+    (smtpmail-default-smtp-server . "localhost")
+    (smtpmail-smtp-server         . "localhost")
+    (smtpmail-smtp-service        . 1025)
+    (user-mail-address            . "joey.liu@philips.com")
+    (mu4e-compose-signature       . "\nBest regards\n\nJoey Liu\nPhilips Research\nDept. of Acute Care Solutions\n\n"))
+  t)
 
 ;; mu4e
 (after! mu4e
   (setq mu4e-use-fancy-chars t)
   (setq mu4e-get-mail-command "mbsync philips")
+  (setq mu4e-update-interval 600)
 
   (setq mu4e-view-mode-map (make-sparse-keymap)
         mu4e-headers-mode-map (make-sparse-keymap)
         mu4e-main-mode-map (make-sparse-keymap))
+       user-mail-address "joey.liu@philips.com"
+     user-full-name "Liu, Joey"
+     smtpmail-stream-type nil
+     smtpmail-default-smtp-server "localhost"
+     smtpmail-smtp-server "localhost"
+     smtpmail-smtp-service 1025
+     smtpmail-smtp-user "joey.liu@philips.com"
 
   (map! (:map (mu4e-main-mode-map mu4e-view-mode-map)
           :leader
@@ -116,6 +128,7 @@
           :n "U"   #'mu4e-mark-unmark-all
           :n "v"   #'evil-visual-line
           :nv "d"  #'+email/mark
+          :nv "D"  #'+email/mark
           :nv "="  #'+email/mark
           :nv "-"  #'+email/mark
           :nv "+"  #'+email/mark
