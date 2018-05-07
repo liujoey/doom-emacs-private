@@ -179,6 +179,8 @@
 (after! magit
   (require 'dash)
 
+  (setq magit-revision-show-gravatars nil)
+
   (defmacro pretty-magit (WORD ICON PROPS &optional NO-PROMPT?)
     "Replace sanitized WORD with ICON, PROPS and by default add to prompts."
     `(prog1
