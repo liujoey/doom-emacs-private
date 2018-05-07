@@ -231,7 +231,6 @@
       (setq use-magit-commit-prompt-p nil)
       (insert (ivy-read "Commit Type " pretty-magit-prompt
                         :require-match t :sort t :preselect "Add: "))
-      (add-magit-faces)
       (evil-insert 1)  ; If you use evil
       ))
 
