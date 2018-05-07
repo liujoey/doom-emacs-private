@@ -192,14 +192,14 @@
 
   (setq pretty-magit-alist nil)
   (setq pretty-magit-prompt nil)
-  (pretty-magit "Feature"  ? (:foreground "slate gray" :height 1.2))
-  (pretty-magit "Add"      ? (:foreground "#375E97" :height 1.2))
-  (pretty-magit "Fix"      ? (:foreground "#FB6542" :height 1.2))
-  (pretty-magit "Clean"    ? (:foreground "#FFBB00" :height 1.2))
-  (pretty-magit "Docs"     ? (:foreground "#3F681C" :height 1.2))
-  (pretty-magit "master"   ? (:box t :height 1.2) t)
-  (pretty-magit "upstream" ? (:box t :height 1.2) t)
-  (pretty-magit "origin"   ? (:box t :height 1.2) t)
+  (pretty-magit "Feature"  ? (:family "github-octicons" :foreground "slate gray" :height 1.2))
+  (pretty-magit "Add"      ? (:family "github-octicons" :foreground "#375E97" :height 1.2))
+  (pretty-magit "Fix"      ? (:family "github-octicons" :foreground "#FB6542" :height 1.2))
+  (pretty-magit "Clean"    ? (:family "FontAwesome" :foreground "#FFBB00" :height 1.2))
+  (pretty-magit "Docs"     ? (:family "github-octicons" :foreground "#3F681C" :height 1.2))
+  (pretty-magit "master"   ? (:family "all-the-icons" :box t :height 1.2) t)
+  (pretty-magit "upstream" ? (:family "github-octicons" :box t :height 1.2) t)
+  (pretty-magit "origin"   ? (:family "github-octicons" :box t :height 1.2) t)
 
   (defun add-magit-faces ()
     "Add face properties and compose symbols for buffer from pretty-magit."
