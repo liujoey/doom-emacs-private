@@ -51,6 +51,16 @@
  :nvm "H" #'doom/backward-to-bol-or-indent
  :nvm "L" #'doom/forward-to-last-non-comment-or-eol)
 
+;; company-box
+(after! company-box
+  (setq company-box-icons-elisp
+        (list (all-the-icons-material "functions" :face 'all-the-icons-purple :height 0.8)
+              (all-the-icons-material "check_circle" :face 'all-the-icons-blue :height 0.8)
+              (all-the-icons-material "stars" :face 'all-the-icons-yellow :height 0.8)
+              (all-the-icons-material "format_paint" :face 'all-the-icons-pink :height 0.8))
+        company-box-icons-unknown (all-the-icons-material "find_in_page" :face 'all-the-icons-silver :height 0.8)
+        company-box-icons-yasnippet (all-the-icons-material "short_text" :face 'all-the-icons-green :height 0.8)))
+
 ;; my email setting
 (set! :email "joey.liu@philips.com"
     '((mu4e-sent-folder       . "/joey.liu@philips.com/Sent Mail")
