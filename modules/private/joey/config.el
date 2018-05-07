@@ -64,6 +64,7 @@
 ;; mu4e
 (after! mu4e
   (setq mu4e-use-fancy-chars t)
+  (setq mu4e-get-mail-command "mbsync philips")
 
   (setq mu4e-view-mode-map (make-sparse-keymap)
         mu4e-headers-mode-map (make-sparse-keymap)
@@ -80,21 +81,25 @@
           :localleader
           :n "f" #'mu4e-compose-forward
           :n "r" #'mu4e-compose-reply
-          :n "C" #'+email/compose
+          :n "c" #'mu4e-compose-new
           :n "e" #'mu4e-compose-edit)
+
+        (:map (mu4e-main-mode-map mu4e-headers-mode-map)
+          :n "b"   #'mu4e-headers-search-bookmark
+          :n "s"   #'mu4e-headers-search-edit)
 
         (:map mu4e-main-mode-map
           :n "q"   #'mu4e-quit
           :n "u"   #'mu4e-update-index
           :n "U"   #'mu4e-update-mail-and-index
           :n "J"   #'mu4e~headers-jump-to-maildir
-          :n "C"   #'+email/compose
-          :n "b"   #'mu4e-headers-search-bookmark)
+          :n "C"   #'+email/compose)
 
         (:map mu4e-headers-mode-map
           :n "q"   #'mu4e~headers-quit-buffer
+          :n "r"   #'mu4e-compose-reply
+          :n "c"   #'mu4e-compose-edit
           :n "C"   #'+email/compose
-          :n "s"   #'mu4e-headers-search-edit
           :n "S"   #'mu4e-headers-search-narrow
           :n "RET" #'mu4e-headers-view-message
           :n "u"   #'mu4e-headers-mark-for-unmark
@@ -108,7 +113,7 @@
           :nv "?"  #'+email/mark
           :nv "r"  #'+email/mark
           :nv "m"  #'+email/mark
-          :n "x"   #'mu4e-mark-execute-all
+          :n  "x"  #'mu4e-mark-execute-all
 
           :n "]]"  #'mu4e-headers-next-unread
           :n "[["  #'mu4e-headers-prev-unread
@@ -1072,4 +1077,3 @@ so change the default 'F' binding in the agenda to allow both"
                          (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
                          (org-tags-match-list-sublevels nil))))
                  nil)))))
-
