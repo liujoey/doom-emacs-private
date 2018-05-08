@@ -77,6 +77,23 @@
 
 ;; mu4e
 (after! mu4e
+  (setq mu4e-headers-has-child-prefix '("+" . "")
+        mu4e-headers-empty-parent-prefix '("-" . "")
+        mu4e-headers-first-child-prefix '("\\" . "")
+        mu4e-headers-duplicate-prefix '("=" . "")
+        mu4e-headers-default-prefix '("|" . "")
+        mu4e-headers-draft-mark '("D" . "")
+        mu4e-headers-flagged-mark '("F" . "")
+        mu4e-headers-new-mark '("N" . "")
+        mu4e-headers-passed-mark '("P" . "")
+        mu4e-headers-replied-mark '("R" . "")
+        mu4e-headers-seen-mark '("S" . "")
+        mu4e-headers-trashed-mark '("T" . "")
+        mu4e-headers-attach-mark '("a" . "")
+        mu4e-headers-encrypted-mark '("x" . "")
+        mu4e-headers-signed-mark '("s" . "")
+        mu4e-headers-unread-mark '("u" . ""))
+
   (setq mu4e-use-fancy-chars t)
   (setq mu4e-get-mail-command "mbsync philips")
   (setq mu4e-update-interval 600)
