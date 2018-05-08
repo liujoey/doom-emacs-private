@@ -244,14 +244,6 @@
   (require 'org-id)
   (add-to-list 'org-modules 'org-habit)
 
-  (map!
-    ;; org
-    :map org-mode-map
-    :n "C-h" #'evil-window-left
-    :n "C-l" #'evil-window-right
-    :n "C-k" #'evil-window-up
-    :n "C-j" #'evil-window-down)
-
   (after! org-agenda
     (map!
      ;; org agenda
