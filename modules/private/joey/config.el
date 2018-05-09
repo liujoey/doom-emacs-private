@@ -125,11 +125,10 @@
           :n "/" #'mu4e~headers-jump-to-maildir)
 
         (:map (mu4e-headers-mode-map mu4e-view-mode-map)
-          :localleader
-          :n "f" #'mu4e-compose-forward
-          :n "r" #'mu4e-compose-reply
-          :n "c" #'mu4e-compose-new
-          :n "e" #'mu4e-compose-edit)
+          :n "F" #'mu4e-compose-forward
+          :n "R" #'mu4e-compose-reply
+          :n "C" #'mu4e-compose-new
+          :n "E" #'mu4e-compose-edit)
 
         (:map (mu4e-main-mode-map mu4e-headers-mode-map)
           :n "b"   #'mu4e-headers-search-bookmark
@@ -144,9 +143,6 @@
 
         (:map mu4e-headers-mode-map
           :n "q"   #'mu4e~headers-quit-buffer
-          :n "r"   #'mu4e-compose-reply
-          :n "c"   #'mu4e-compose-edit
-          :n "C"   #'+email/compose
           :n "S"   #'mu4e-headers-search-narrow
           :n "RET" #'mu4e-headers-view-message
           :n "u"   #'mu4e-headers-mark-for-unmark
@@ -163,8 +159,10 @@
           :nv "m"  #'+email/mark
           :n  "x"  #'mu4e-mark-execute-all
 
-          :n "]]"  #'mu4e-headers-next-unread
+          :n "{"   #'mu4e-headers-prev
+          :n "}"   #'mu4e-headers-next
           :n "[["  #'mu4e-headers-prev-unread
+          :n "]]"  #'mu4e-headers-next-unread
 
           (:localleader
             :n "s" 'mu4e-headers-change-sorting
@@ -177,16 +175,15 @@
 
         (:map mu4e-view-mode-map
           :n "q" #'mu4e~view-quit-buffer
-          :n "r" #'mu4e-compose-reply
-          :n "c" #'mu4e-compose-edit
           :n "o" #'ace-link-mu4e
+          :n "a" #'mu4e-view-attachment-action
 
           :n "<M-Left>"  #'mu4e-view-headers-prev
           :n "<M-Right>" #'mu4e-view-headers-next
-          :n "[m" #'mu4e-view-headers-prev
-          :n "]m" #'mu4e-view-headers-next
-          :n "[u" #'mu4e-view-headers-prev-unread
-          :n "]u" #'mu4e-view-headers-next-unread
+          :n "{" #'mu4e-view-headers-prev
+          :n "}" #'mu4e-view-headers-next
+          :n "[[" #'mu4e-view-headers-prev-unread
+          :n "]]" #'mu4e-view-headers-next-unread
 
           (:localleader
             :n "%" #'mu4e-view-mark-pattern
