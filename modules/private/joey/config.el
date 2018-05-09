@@ -71,7 +71,7 @@
 
 ;; my email setting
 (set! :email "joey.liu@philips.com"
-  '((mu4e-sent-folder             . "/joey.liu@philips.com/Sent Mail")
+  '((mu4e-sent-folder             . "/joey.liu@philips.com/Sent")
     (mu4e-drafts-folder           . "/joey.liu@philips.com/Drafts")
     (mu4e-trash-folder            . "/joey.liu@philips.com/Trash")
     (smtpmail-smtp-user           . "joey.liu@philips.com")
