@@ -2,6 +2,7 @@
 (if (eq system-type 'darwin)
     (mac-auto-operator-composition-mode))
 
+;; python
 (def-package! pyvenv
   :if (featurep! :lang python)
   :after python
@@ -42,6 +43,9 @@
   ;; setup shell correctly on environment switch
   (dolist (func '(pyvenv-activate pyvenv-deactivate pyvenv-workon))
     (advice-add func :after '+jl|python-setup-everything)))
+
+;; java
+(setq meghanada-javac-xlint "-Xlint:all,-processing")
 
 ;; my key bindings
 (map!
