@@ -2,6 +2,10 @@
 (if (eq system-type 'darwin)
     (mac-auto-operator-composition-mode))
 
+;; popup rules
+(set! :popup "^\\*HTTP Response" '((side . right) (size . +popup-shrink-to-fit)))
+(set! :popup "^\\*Org Agenda" '((side . right) (size . +popup-shrink-to-fit)))
+
 ;; python
 (def-package! pyvenv
   :if (featurep! :lang python)
@@ -270,9 +274,7 @@
      ;; org agenda
      :map org-agenda-mode-map
      :m "C-h" #'evil-window-left
-     :m "C-l" #'evil-window-right
-     :m "C-k" #'evil-window-up
-     :m "C-j" #'evil-window-down))
+     :m "C-l" #'evil-window-right))
 
   (setq org-agenda-files (quote ("~/org")))
 
