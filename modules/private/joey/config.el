@@ -69,6 +69,9 @@
         company-box-icons-unknown (all-the-icons-material "find_in_page" :face 'all-the-icons-silver :height 0.8)
         company-box-icons-yasnippet (all-the-icons-material "short_text" :face 'all-the-icons-green :height 0.8)))
 
+(after! langtool
+  (setq langtool-language-tool-jar "/usr/local/Cellar/languagetool/4.1/libexec/languagetool-commandline.jar"))
+
 ;; my email setting
 (set! :email "joey.liu@philips.com"
   '((mu4e-sent-folder             . "/joey.liu@philips.com/Sent")
