@@ -89,6 +89,15 @@
 
 ;; mu4e
 (after! mu4e
+  (defun htmlize-before-send ()
+    "When in an org-mu4e-compose-org-mode message, htmlize it."
+    (when (member 'org~mu4e-mime-switch-headers-or-body post-command-hook)
+      (message-mode)
+      (org-mime-htmlize)))
+
+  (advice-add 'message-send-and-exit :before 'htmlize-before-send)
+
+  (setq mail-user-agent 'mu4e-user-agent)
   (setq mu4e-headers-has-child-prefix '("+" . "")
         mu4e-headers-empty-parent-prefix '("-" . "")
         mu4e-headers-first-child-prefix '("\\" . "")
@@ -258,6 +267,19 @@
   (advice-add 'magit-commit :after 'use-magit-commit-prompt))
 
 ;; org
+(def-package! org-mime
+  :if (featurep! :lang org)
+  :after org
+  :config
+  (add-hook 'org-mime-html-hook
+        (lambda ()
+          (progn
+            (org-mime-change-element-style
+             "pre" "color: #bbc2cf; background-color: #282c34; padding: 0.5em;")
+            (org-mime-change-element-style
+             "blockquote" "border-left: 2px solid gray; padding-left: 4px;"))))
+  (global-set-key (kbd "C-c M") 'org-mime-org-buffer-htmlize))
+
 (after! org
   (require 'org-checklist)
   (require 'org-id)
