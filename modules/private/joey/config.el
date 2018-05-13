@@ -2,9 +2,9 @@
 (if (eq system-type 'darwin)
     (mac-auto-operator-composition-mode))
 
-;; popup rules
-(set! :popup "^\\*HTTP Response" '((side . right) (size . +popup-shrink-to-fit)))
-(set! :popup "^\\*Org Agenda" '((side . right) (size . +popup-shrink-to-fit)))
+;; restclient
+(after! restclient
+  (set! :popup "^\\*HTTP Response" '((side . right) (size . +popup-shrink-to-fit))))
 
 ;; python
 (def-package! pyvenv
@@ -268,6 +268,8 @@
   (require 'org-checklist)
   (require 'org-id)
   (add-to-list 'org-modules 'org-habit)
+  (set! :popup "^\\*Org Agenda" '((side . right) (size . +popup-shrink-to-fit)))
+
 
   (after! org-agenda
     (map!
