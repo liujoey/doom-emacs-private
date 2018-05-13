@@ -118,6 +118,10 @@
   (setq mu4e-use-fancy-chars t)
   (setq mu4e-get-mail-command "mbsync philips")
   (setq mu4e-update-interval 600)
+  (setq mu4e-headers-fields '((:human-date . 16)
+                              (:flags . 8)
+                              (:from-or-to . 26)
+                              (:thread-subject)))
 
   (setq mu4e-view-mode-map (make-sparse-keymap)
         mu4e-headers-mode-map (make-sparse-keymap)
