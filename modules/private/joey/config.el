@@ -82,6 +82,7 @@
     (smtpmail-default-smtp-server . "localhost")
     (smtpmail-smtp-server         . "localhost")
     (smtpmail-smtp-service        . 1025)
+    (user-full-name               . "Liu, Joey")
     (user-mail-address            . "joey.liu@philips.com")
     (mu4e-compose-signature       . "\nBest regards\n\nJoey Liu\nPhilips Research\nDept. of Acute Care Solutions\n\n"))
   t)
@@ -112,13 +113,6 @@
   (setq mu4e-view-mode-map (make-sparse-keymap)
         mu4e-headers-mode-map (make-sparse-keymap)
         mu4e-main-mode-map (make-sparse-keymap))
-       user-mail-address "joey.liu@philips.com"
-     user-full-name "Liu, Joey"
-     smtpmail-stream-type nil
-     smtpmail-default-smtp-server "localhost"
-     smtpmail-smtp-server "localhost"
-     smtpmail-smtp-service 1025
-     smtpmail-smtp-user "joey.liu@philips.com"
 
   (map! (:map (mu4e-main-mode-map mu4e-view-mode-map)
           :leader
