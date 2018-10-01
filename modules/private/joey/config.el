@@ -1,52 +1,21 @@
 ;; make ligature font works on operators
-(if (eq system-type 'darwin)
-    (mac-auto-operator-composition-mode))
+;; (if (eq system-type 'darwin)
+;;     (mac-auto-operator-composition-mode))
+
+;; evil-snipe
+(after! evil-snipe
+  (setq evil-snipe-scope 'visible)
+  (defun restrict-to-line-scope (orig-fn &rest args)
+    (let ((evil-snipe-scope 'line))
+      (apply orig-fn args)))
+  (advice-add #'evil-snipe-f :around #'restrict-to-line-scope)
+  (advice-add #'evil-snipe-F :around #'restrict-to-line-scope)
+  (advice-add #'evil-snipe-t :around #'restrict-to-line-scope)
+  (advice-add #'evil-snipe-T :around #'restrict-to-line-scope))
 
 ;; restclient
 (after! restclient
-  (set! :popup "^\\*HTTP Response" '((side . right) (size . +popup-shrink-to-fit))))
-
-;; python
-(def-package! pyvenv
-  :if (featurep! :lang python)
-  :after python
-  :config
-  (defun +jl|python-add-version-to-modeline ()
-    "Add version string to the major mode in the modeline."
-    (setq mode-name
-          (if +python-current-version
-              (if pyvenv-virtual-env-name
-                  (format "Python %s [%s]" +python-current-version pyvenv-virtual-env-name)
-                (format "Python %s" +python-current-version))
-            "Python")))
-
-  (defun +jl|python-setup-shell ()
-    (if (executable-find "ipython")
-        (setq python-shell-interpreter "ipython"
-              python-shell-interpreter-args "-i --simple-prompt --no-color-info"
-              python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-              python-shell-prompt-block-regexp "\\.\\.\\.\\.: "
-              python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-              python-shell-completion-setup-code
-              "from IPython.core.completerlib import module_completion"
-              python-shell-completion-string-code
-              "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
-      (setq python-shell-interpreter "python"
-            python-shell-interpreter-args "-i")))
-
-  (defun +jl|python-detect-version ()
-    (when-let* ((version-str (shell-command-to-string "python --version 2>&1 | cut -d' ' -f2")))
-      (setq version-str (string-trim version-str)
-            +python-current-version version-str)))
-
-  (defun +jl|python-setup-everything (&rest args)
-    (+jl|python-setup-shell)
-    (+jl|python-detect-version)
-    (+jl|python-add-version-to-modeline))
-
-  ;; setup shell correctly on environment switch
-  (dolist (func '(pyvenv-activate pyvenv-deactivate pyvenv-workon))
-    (advice-add func :after '+jl|python-setup-everything)))
+  (set-popup-rule! "^\\*HTTP Response" :side 'right :size #'+popup-shrink-to-fit))
 
 ;; java
 (setq meghanada-javac-xlint "-Xlint:all,-processing")
@@ -59,153 +28,8 @@
  :nvm "H" #'doom/backward-to-bol-or-indent
  :nvm "L" #'doom/forward-to-last-non-comment-or-eol)
 
-;; company-box
-(after! company-box
-  (setq company-box-icons-elisp
-        (list (all-the-icons-material "functions" :face 'all-the-icons-purple :height 0.8)
-              (all-the-icons-material "check_circle" :face 'all-the-icons-blue :height 0.8)
-              (all-the-icons-material "stars" :face 'all-the-icons-yellow :height 0.8)
-              (all-the-icons-material "format_paint" :face 'all-the-icons-pink :height 0.8))
-        company-box-icons-unknown (all-the-icons-material "find_in_page" :face 'all-the-icons-silver :height 0.8)
-        company-box-icons-yasnippet (all-the-icons-material "short_text" :face 'all-the-icons-green :height 0.8)))
-
 (after! langtool
   (setq langtool-language-tool-jar "/usr/local/Cellar/languagetool/4.1/libexec/languagetool-commandline.jar"))
-
-;; my email setting
-(set! :email "joey.liu@philips.com"
-  '((mu4e-sent-folder             . "/joey.liu@philips.com/Sent")
-    (mu4e-drafts-folder           . "/joey.liu@philips.com/Drafts")
-    (mu4e-trash-folder            . "/joey.liu@philips.com/Trash")
-    (smtpmail-smtp-user           . "joey.liu@philips.com")
-    (smtpmail-stream-type         . nil)
-    (smtpmail-default-smtp-server . "localhost")
-    (smtpmail-smtp-server         . "localhost")
-    (smtpmail-smtp-service        . 1025)
-    (user-full-name               . "Liu, Joey")
-    (user-mail-address            . "joey.liu@philips.com")
-    (mu4e-compose-signature       . "\nBest regards\n\nJoey Liu\nPhilips Research\nDept. of Acute Care Solutions\n\n"))
-  t)
-
-;; mu4e
-(after! mu4e
-  (defun htmlize-before-send ()
-    "When in an org-mu4e-compose-org-mode message, htmlize it."
-    (when (member 'org~mu4e-mime-switch-headers-or-body post-command-hook)
-      (message-mode)
-      (org-mime-htmlize)))
-
-  (advice-add 'message-send-and-exit :before 'htmlize-before-send)
-
-  (setq mail-user-agent 'mu4e-user-agent)
-  (setq mu4e-headers-has-child-prefix '("+" . "")
-        mu4e-headers-empty-parent-prefix '("-" . "")
-        mu4e-headers-first-child-prefix '("\\" . "")
-        mu4e-headers-duplicate-prefix '("=" . "")
-        mu4e-headers-default-prefix '("|" . "")
-        mu4e-headers-draft-mark '("D" . "")
-        mu4e-headers-flagged-mark '("F" . "")
-        mu4e-headers-new-mark '("N" . "")
-        mu4e-headers-passed-mark '("P" . "")
-        mu4e-headers-replied-mark '("R" . "")
-        mu4e-headers-seen-mark '("S" . "")
-        mu4e-headers-trashed-mark '("T" . "")
-        mu4e-headers-attach-mark '("a" . "")
-        mu4e-headers-encrypted-mark '("x" . "")
-        mu4e-headers-signed-mark '("s" . "")
-        mu4e-headers-unread-mark '("u" . ""))
-
-  (setq mu4e-use-fancy-chars t)
-  (setq mu4e-get-mail-command "mbsync philips")
-  (setq mu4e-update-interval 600)
-  (setq mu4e-headers-fields '((:human-date . 16)
-                              (:flags . 8)
-                              (:from-or-to . 26)
-                              (:thread-subject)))
-
-  (setq mu4e-view-mode-map (make-sparse-keymap)
-        mu4e-headers-mode-map (make-sparse-keymap)
-        mu4e-main-mode-map (make-sparse-keymap))
-
-  (map! (:map (mu4e-main-mode-map mu4e-view-mode-map)
-          :leader
-          :n "," #'mu4e-context-switch
-          :n "." #'mu4e-headers-search-bookmark
-          :n ">" #'mu4e-headers-search-bookmark-edit
-          :n "/" #'mu4e~headers-jump-to-maildir)
-
-        (:map (mu4e-headers-mode-map mu4e-view-mode-map)
-          :n "F" #'mu4e-compose-forward
-          :n "R" #'mu4e-compose-reply
-          :n "C" #'mu4e-compose-new
-          :n "E" #'mu4e-compose-edit)
-
-        (:map (mu4e-main-mode-map mu4e-headers-mode-map)
-          :n "b"   #'mu4e-headers-search-bookmark
-          :n "s"   #'mu4e-headers-search-edit)
-
-        (:map mu4e-main-mode-map
-          :n "q"   #'mu4e-quit
-          :n "u"   #'mu4e-update-index
-          :n "U"   #'mu4e-update-mail-and-index
-          :n "J"   #'mu4e~headers-jump-to-maildir
-          :n "C"   #'+email/compose)
-
-        (:map mu4e-headers-mode-map
-          :n "q"   #'mu4e~headers-quit-buffer
-          :n "S"   #'mu4e-headers-search-narrow
-          :n "RET" #'mu4e-headers-view-message
-          :n "u"   #'mu4e-headers-mark-for-unmark
-          :n "U"   #'mu4e-mark-unmark-all
-          :n "v"   #'evil-visual-line
-          :nv "d"  #'+email/mark
-          :nv "D"  #'+email/mark
-          :nv "="  #'+email/mark
-          :nv "-"  #'+email/mark
-          :nv "+"  #'+email/mark
-          :nv "!"  #'+email/mark
-          :nv "?"  #'+email/mark
-          :nv "r"  #'+email/mark
-          :nv "m"  #'+email/mark
-          :n  "x"  #'mu4e-mark-execute-all
-
-          :n "{"   #'mu4e-headers-prev
-          :n "}"   #'mu4e-headers-next
-          :n "[["  #'mu4e-headers-prev-unread
-          :n "]]"  #'mu4e-headers-next-unread
-
-          (:localleader
-            :n "s" 'mu4e-headers-change-sorting
-            :n "t" 'mu4e-headers-toggle-threading
-            :n "r" 'mu4e-headers-toggle-include-related
-
-            :n "%" #'mu4e-headers-mark-pattern
-            :n "t" #'mu4e-headers-mark-subthread
-            :n "T" #'mu4e-headers-mark-thread))
-
-        (:map mu4e-view-mode-map
-          :n "q" #'mu4e~view-quit-buffer
-          :n "o" #'ace-link-mu4e
-          :n "a" #'mu4e-view-attachment-action
-
-          :n "<M-Left>"  #'mu4e-view-headers-prev
-          :n "<M-Right>" #'mu4e-view-headers-next
-          :n "{" #'mu4e-view-headers-prev
-          :n "}" #'mu4e-view-headers-next
-          :n "[[" #'mu4e-view-headers-prev-unread
-          :n "]]" #'mu4e-view-headers-next-unread
-
-          (:localleader
-            :n "%" #'mu4e-view-mark-pattern
-            :n "t" #'mu4e-view-mark-subthread
-            :n "T" #'mu4e-view-mark-thread
-
-            :n "d" #'mu4e-view-mark-for-trash
-            :n "r" #'mu4e-view-mark-for-refile
-            :n "m" #'mu4e-view-mark-for-move))
-
-        (:map mu4e~update-mail-mode-map
-          :n "q" #'mu4e-interrupt-update-mail)))
 
 ;; pretty magit
 (after! magit
@@ -271,32 +95,11 @@
   (advice-add 'magit-commit :after 'use-magit-commit-prompt))
 
 ;; org
-(def-package! org-mime
-  :if (featurep! :lang org)
-  :after org
-  :config
-  (add-hook 'org-mime-html-hook
-        (lambda ()
-          (progn
-            (org-mime-change-element-style
-             "pre" "color: #bbc2cf; background-color: #282c34; padding: 0.5em;")
-            (org-mime-change-element-style
-             "blockquote" "border-left: 2px solid gray; padding-left: 4px;"))))
-  (global-set-key (kbd "C-c M") 'org-mime-org-buffer-htmlize))
-
 (after! org
   (require 'org-checklist)
   (require 'org-id)
   (add-to-list 'org-modules 'org-habit)
-  (set! :popup "^\\*Org Agenda" '((side . right) (size . +popup-shrink-to-fit)))
-
-
-  (after! org-agenda
-    (map!
-     ;; org agenda
-     :map org-agenda-mode-map
-     :m "C-h" #'evil-window-left
-     :m "C-l" #'evil-window-right))
+  (set-popup-rule! "^\\*Org Agenda" :side 'right :size #'+popup-shrink-to-fit)
 
   (setq org-agenda-files (quote ("~/org")))
 
@@ -906,10 +709,6 @@ as the default task."
             (org-agenda-redo)))
       (widen)))
 
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "W" (lambda () (interactive) (setq bh/hide-scheduled-and-waiting-next-tasks t) (bh/widen))))
-            'append)
-
   (defun bh/restrict-to-file-or-follow (arg)
     "Set agenda restriction to 'file or with argument invoke follow mode.
 I don't use follow mode very often but I restrict to file all the time
@@ -921,10 +720,6 @@ so change the default 'F' binding in the agenda to allow both"
       (bh/set-agenda-restriction-lock 4)
       (org-agenda-redo)
       (beginning-of-buffer)))
-
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "F" 'bh/restrict-to-file-or-follow))
-            'append)
 
   (defun bh/narrow-to-org-subtree ()
     (widen)
@@ -941,10 +736,6 @@ so change the default 'F' binding in the agenda to allow both"
           (when org-agenda-sticky
             (org-agenda-redo)))
       (bh/narrow-to-org-subtree)))
-
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "S" 'bh/narrow-to-subtree))
-            'append)
 
   (defun bh/set-agenda-restriction-lock (arg)
     "Set restriction lock to current task subtree or file if prefix is specified"
@@ -985,10 +776,6 @@ so change the default 'F' binding in the agenda to allow both"
           (org-agenda-redo))
       (bh/narrow-up-one-org-level)))
 
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "U" 'bh/narrow-up-one-level))
-            'append)
-
   (defun bh/narrow-to-org-project ()
     (widen)
     (save-excursion
@@ -1009,10 +796,6 @@ so change the default 'F' binding in the agenda to allow both"
       (bh/narrow-to-org-project)
       (save-restriction
         (org-agenda-set-restriction-lock))))
-
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "P" 'bh/narrow-to-project))
-            'append)
 
   (defvar bh/project-list nil)
 
@@ -1057,9 +840,17 @@ so change the default 'F' binding in the agenda to allow both"
           (setq bh/hide-scheduled-and-waiting-next-tasks t)
           (error "All projects viewed.")))))
 
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "P" 'bh/view-next-project))
-            'append)
+  (after! org-agenda
+    (map!
+     ;; org agenda
+     :map org-agenda-mode-map
+     :m "P" #'bh/narrow-to-project
+     :m "U" #'bh/narrow-up-one-level
+     :m "T" #'bh/narrow-to-subtree
+     :m "F" #'bh/restrict-to-file-or-follow
+     :m "W" (lambda () (interactive) (setq bh/hide-scheduled-and-waiting-next-tasks t) (bh/widen))
+     :m "C-h" #'evil-window-left
+     :m "C-l" #'evil-window-right))
 
   (global-set-key (kbd "<f12>") 'org-agenda)
   (global-set-key (kbd "<f9> I") 'bh/punch-in)
