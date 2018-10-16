@@ -116,9 +116,6 @@
   ;; Targets complete directly with IDO
   (setq org-outline-path-complete-in-steps nil)
 
-  ;; keep the agenda fast
-  (setq org-agenda-span 'day)
-
   ;; Agenda log mode items to display (closed and state changes by default)
   (setq org-agenda-log-mode-items (quote (closed state)))
 
@@ -358,7 +355,7 @@ A prefix arg forces clock in of the default task."
                  "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
                 ("n" "note" entry (file "~/org/refile.org")
                  "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
-                ("j" "Journal" entry (file+datetree "~/org/diary.org")
+                ("j" "Journal" entry (file+olp+datetree "~/org/diary.org")
                  "* %?\n%U\n" :clock-in t :clock-resume t)
                 ("w" "org-protocol" entry (file "~/org/refile.org")
                  "* TODO Review %c\n%U\n" :immediate-finish t)
